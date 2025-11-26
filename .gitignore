@@ -154,3 +154,7 @@ go.work
 
 # Postman tests reports
 tests/postman/reports/
+
+# Development auxilliries
+.lsp
+.clj-kondo
