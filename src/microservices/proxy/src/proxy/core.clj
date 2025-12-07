@@ -1,10 +1,8 @@
 (ns proxy.core
   (:require [org.httpkit.server :as server]
             [compojure.core :refer [GET ANY defroutes]]
-            ;; [compojure.route :as route]
             [ring.middleware.json :refer [wrap-json-body wrap-json-response]]
             [ring.middleware.params :refer [wrap-params]]
-            ;; [ring.util.response :as response]
             [clj-http.client :as http]
             [cheshire.core :as json]
             [clojure.tools.logging :as log]
@@ -39,18 +37,21 @@
     (let [url (str service-url (:uri req))
           method (:request-method req)
           headers (-> (:headers req)
-                      (dissoc "Host" "Content-Length")
-                      (assoc "Content-Type" "application/json"))
+                      (dissoc "Host")
+                      (dissoc "host")
+                      (dissoc "Content-Length")
+                      (dissoc "content-length")
+                      (assoc "Content-Type" "application/json")
+                      (assoc "content-type" "application/json"))
           body (when-let [body-data (:body req)]
-                 (slurp body-data))
-
+                 (http/json-encode body-data))
           proxy-response (http/request {:method method
-                                  :url url
-                                  :headers headers
-                                  :body body
-                                  :query-params (:query-params req)
-                                  :throw false
-                                  :as :stream})]
+                                        :url url
+                                        :headers headers
+                                        :body body
+                                        :query-params (:query-params req)
+                                        :throw false
+                                        :as :stream})]
 
       {:status (:status proxy-response)
        :headers (dissoc (:headers proxy-response) "Transfer-Encoding")
@@ -150,3 +151,7 @@
     (server/run-server app {:port port})
 
     (log/info (str "API Gateway started successfully on port " port))))
+
+
+(comment
+  (+ 2 2))
