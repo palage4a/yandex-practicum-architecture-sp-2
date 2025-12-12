@@ -279,11 +279,11 @@ cat .docker/config.json | base64
 
 **Вывод вызова api/movies**
 
-![Вывод вызова api/movies](resources/api-movies-call-output.png)
+![Вывод вызова api/movies](resources/k8s-api-movies-call-output.png)
 
 **Вывод запуска тестов в окружение Kubernetes**
 
-![Вывод запуска тестов в окружение Kubernetes](resources/kubernetes-test-results.png)
+![Вывод запуска тестов в окружение Kubernetes](resources/k8s-test-results.png)
 
 
 # Задание 4
@@ -359,6 +359,23 @@ minikube tunnel
 Потом вызовите
 https://cinemaabyss.example.com/api/movies
 и приложите скриншот развертывания helm и вывода https://cinemaabyss.example.com/api/movies
+
+**Вывод helm install**
+
+![helm-list](resources/helm-install-output.png)
+
+**Вывод helm list**
+
+![helm-install](resources/helm-list-output.png)
+
+**Вывод kubectl get pods**
+
+![kubectl-get-pods](resources/kubectl-status-helm.png)
+
+**Вывод вызова api/movies**
+
+![api-movies-call-output](resources/helm-api-movies-call-output.png)
+
 
 ## Удаляем все
 
