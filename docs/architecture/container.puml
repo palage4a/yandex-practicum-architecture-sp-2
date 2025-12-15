@@ -1,0 +1,83 @@
+@startuml
+title CinemaAbyss Container
+
+top to bottom direction
+
+!include  https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(person, "User", "")
+
+System_Boundary(ca, "Cinema Abyss", "") {
+    Container(tv, "Smart TV application", "")
+    Container(web, "Web application", "Web UI")
+    Container(mobile, "Mobile application", "Mobile app")
+
+    Container(tvbff, "Backend for tv", "Aggregates data from services for Smart TV users")
+    Container(wbff, "Backend for web", "Aggregates data from services for web users")
+    Container(mbff, "Backend for mobile", "Aggregates data from services for mobile app users")
+
+    Container(cache, "Cache", "Stores data for BFFs")
+
+    Container(http, "HTTP gateway", "HTTP entry point")
+
+    Container(auth, "Authorization service", "Managess authorization and authentifaction process")
+    Container(user, "User service", "Manages users")
+    Container(rec, "Recomendation service", "Manages recomendation")
+    Container(sub, "Subscription service", "Manages subcriptions")
+    Container(payment, "Payment service", "Manages payments")
+
+    Container(movie, "Movies catalog service", "Provides movies metadata")
+    Container(media, "Media storage service", "Manages movies media data")
+    Container(play, "Playback service", "Manages user playback proccess (play,pause etc)")
+    Container(aggr, "Aggregation service", "Provides movies sources")
+
+    ContainerQueue(mq, "Message queue", "")
+    ContainerDb(s3, "Object storage", "")
+}
+
+System_Ext(recs, "Third-party Recomendation API", "", "HTTP")
+System_Ext(billings, "Third-party Billing API", "", "HTTP")
+System_Ext(streamings, "Third-party Streaming services API", "", "HTTP/Binary")
+
+Rel(person, web, "")
+Rel(person, tv, "")
+Rel(person, mobile, "")
+
+
+Rel(web, wbff, "")
+Rel(tv, tvbff, "")
+Rel(mobile, mbff, "")
+
+Rel(wbff, cache, "")
+Rel(tvbff, cache, "")
+Rel(mbff, cache, "")
+
+Rel(wbff, http, "")
+Rel(tvbff, http, "")
+Rel(mbff, http, "")
+
+Rel(http, auth, "")
+Rel(http, user, "")
+Rel(http, rec, "")
+Rel(http, sub, "")
+Rel(http, payment, "")
+Rel(http, play, "")
+Rel(http, movie, "")
+Rel(http, aggr, "")
+
+Rel(auth, mq, "")
+Rel(user, mq, "")
+Rel(rec, mq, "")
+Rel(sub, mq, "")
+Rel(payment, mq, "")
+Rel(play, mq, "")
+Rel(movie, mq, "")
+Rel(media, mq, "")
+Rel(media, s3, "")
+Rel(aggr, mq, "")
+
+Rel(aggr, streamings, "")
+Rel(rec, recs, "")
+Rel(payment, billings, "")
+
+@enduml

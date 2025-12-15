@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: movies-service
-        image: ghcr.io/db-exp/cinemaabysstest/movies-service:latest
+        image: ghcr.io/palage4a/yandex-practicum-architecture-sp-2/movies-service:sha-cb36d96@sha256:a3c8840fbe18d6a8ce3428ca2b12968860bf51ff76dfe9add9c78a80641c0385
         imagePullPolicy: Always
         ports:
         - containerPort: 8081

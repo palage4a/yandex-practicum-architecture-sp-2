@@ -5,7 +5,7 @@ global:
 
 # Image pull secrets
 imagePullSecrets:
-  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6
+  dockerconfigjson: ewoJImF1dGhzIjogewoJCSJnaGNyLmlvIjogewoJCQkiYXV0aCI6ICJjR0ZzWVdkbE5HRTZaMmwwYUhWaVgzQmhkRjh4TVVGTFJUVlJSVUV3Um1aelNFRldkV2xJU21keFgyTnhUako2Y25GUlJHY3haVGxuUVhkcldERlpTRWxxZVdvNVpWSk5iMko2U1dkaVNFSjBUVFJZVkhKVVJEZFVORkJIUTNKTFdVZG9VMWxKIgogICAgICAgIH0sCgkJInJlZ2lzdHJ5LnBzLnRhcmFudG9vbC5pbyI6IHt9Cgl9LAoJImNyZWRzU3RvcmUiOiAiZGVza3RvcCIsCgkiY3VycmVudENvbnRleHQiOiAiZGVza3RvcC1saW51eCIsCgkicGx1Z2lucyI6IHsKCQkiLXgtY2xpLWhpbnRzIjogewoJCQkiZW5hYmxlZCI6ICJ0cnVlIgoJCX0sCgkJImRlYnVnIjogewoJCQkiaG9va3MiOiAiZXhlYyIKCQl9LAoJCSJzY291dCI6IHsKCQkJImhvb2tzIjogInB1bGwsYnVpbGR4IGJ1aWxkIgoJCX0KCX0sCgkiZmVhdHVyZXMiOiB7CgkJImhvb2tzIjogInRydWUiCgl9Cn0K
 # Database configuration
 database:
   host: postgres
@@ -33,8 +33,8 @@ database:
 monolith:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/monolith
-    tag: latest
+    repository: ghcr.io/palage4a/yandex-practicum-architecture-sp-2/monolith
+    tag: sha-cb36d96@sha256:863d4813a2ad7e15788d4ed5c098594c1c99656d6975eb0843dc71d6d370d48c
     pullPolicy: Always
   replicas: 1
   resources:
@@ -53,17 +53,17 @@ monolith:
 proxyService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/proxy-service
-    tag: latest
+    repository: ghcr.io/palage4a/yandex-practicum-architecture-sp-2/proxy-service
+    tag: sha-cb36d96@sha256:1f73cbc59c1b5b42c7b5512b2fbd8066caa00af85dce4651449e3fbb44a37fc5
     pullPolicy: Always
   replicas: 1
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 2000m
+      memory: 2Gi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 1000m
+      memory: 1Gi
   service:
     port: 80
     targetPort: 8000
@@ -73,8 +73,8 @@ proxyService:
 moviesService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/movies-service
-    tag: latest
+    repository: ghcr.io/palage4a/yandex-practicum-architecture-sp-2/movies-service
+    tag: sha-cb36d96@sha256:a3c8840fbe18d6a8ce3428ca2b12968860bf51ff76dfe9add9c78a80641c0385
     pullPolicy: Always
   replicas: 1
   resources:
@@ -93,17 +93,19 @@ moviesService:
 eventsService:
   enabled: true
   image:
-    repository: ghcr.io/db-exp/cinemaabysstest/events-service
-    tag: latest
+    repository: ghcr.io/palage4a/yandex-practicum-architecture-sp-2/events-service
+    tag: sha-cb36d96@sha256:c3d15ab12c3ed1dc2512a882588113e350043f2dd52e5cb6ab9b8f6e4515120b
     pullPolicy: Always
   replicas: 1
+  env:
+    KAFKA_BROKERS: kafka:9092
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
+      cpu: 2000m
+      memory: 2Gi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 1000m
+      memory: 1Gi
   service:
     port: 8082
     targetPort: 8082
@@ -119,11 +121,11 @@ kafka:
   replicas: 1
   resources:
     limits:
+      cpu: 2000m
+      memory: 2Gi
+    requests:
       cpu: 1000m
       memory: 1Gi
-    requests:
-      cpu: 200m
-      memory: 512Mi
   persistence:
     enabled: true
     size: 5Gi
@@ -173,10 +175,6 @@ ingress:
           pathType: Prefix
           service: proxy-service
           port: 80
-        - path: /api/events
-          pathType: Prefix
-          service: events-service
-          port: 8082
 
 # Application configuration
 config:
